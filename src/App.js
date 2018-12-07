@@ -7,14 +7,28 @@ import Register from './components/Register';
 import './App.css';
 
 export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      userJwtToken: '',
+    };
+    this.updateToken = this.updateToken.bind(this);
+  }
+
+  updateToken(jwtToken) {
+    this.setState({
+      userJwtToken: jwtToken,
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <Register />
-          <CreateContact />
-          <Login />
+          <CreateContact userJwtToken={this.state.userJwtToken} />
+          <Login updateToken={this.updateToken} />
         </header>
       </div>
     );

@@ -25,6 +25,7 @@ export default class CreateContact extends Component {
       .post('/login', user)
       .then(res => {
         const { token, email } = res.data;
+        this.props.updateToken(token);
         this.setState({
           successMessage: `Assigned token: ${token} for ${email}`,
         });

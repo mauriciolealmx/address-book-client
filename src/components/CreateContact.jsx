@@ -9,7 +9,7 @@ export default class CreateContact extends Component {
     super(props);
     this.state = {
       userId: '',
-      successMessage: '',
+      feedbackMessage: '',
       contactName: '',
       contactLastName: '',
       contactEmail: '',
@@ -18,19 +18,25 @@ export default class CreateContact extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     const { userId, contactName, contactLastName, contactEmail } = this.state;
+    const { userJwtToken } = this.props;
     const contact = {
       email: contactEmail,
       firstName: contactName,
       lastName: contactLastName,
+      token: userJwtToken,
     };
     axios
       .post(`/users/${userId}/contacts`, contact)
       .then(res => {
         const { firstName } = res.data;
+        const feedbackMessage = !firstName
+          ? 'User needs to be Logged in order to create a contact.'
+          : `User ${firstName} was added to ${userId}`;
+
         this.setState({
-          successMessage: `User ${firstName} was added to ${userId}`,
+          feedbackMessage,
         });
       })
       .catch(err => {
@@ -45,7 +51,7 @@ export default class CreateContact extends Component {
   }
 
   render() {
-    const { successMessage } = this.state;
+    const { feedbackMessage } = this.state;
     return (
       <div>
         <form>
@@ -92,7 +98,7 @@ export default class CreateContact extends Component {
             Create Contact
           </Button>
         </form>
-        {successMessage && <div>{successMessage}</div>}
+        {feedbackMessage && <div>{feedbackMessage}</div>}
       </div>
     );
   }

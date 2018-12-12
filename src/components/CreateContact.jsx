@@ -8,19 +8,18 @@ export default class CreateContact extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: '',
-      feedbackMessage: '',
-      contactName: '',
-      contactLastName: '',
       contactEmail: '',
+      contactLastName: '',
+      contactName: '',
+      feedbackMessage: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit() {
-    const { userId, contactName, contactLastName, contactEmail } = this.state;
-    const { userJwtToken } = this.props;
+    const { contactName, contactLastName, contactEmail } = this.state;
+    const { userJwtToken, userId } = this.props;
     const contact = {
       email: contactEmail,
       firstName: contactName,
@@ -55,13 +54,6 @@ export default class CreateContact extends Component {
     return (
       <div>
         <form>
-          <TextField
-            id="standard-text"
-            label="User Id"
-            onChange={event => this.handleChange('userId', event)}
-            value={this.state.userId}
-            margin="normal"
-          />
           <TextField
             id="standard-text"
             label="Name"

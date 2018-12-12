@@ -4,6 +4,8 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+const getEmailId = email => email.split('@')[0];
+
 export default class CreateContact extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +26,11 @@ export default class CreateContact extends Component {
     axios
       .post('/login', user)
       .then(res => {
+        const { updateToken, updateUserId } = this.props;
         const { token, email } = res.data;
-        this.props.updateToken(token);
+        
+        updateToken(token);
+        updateUserId(getEmailId(email));
         this.setState({
           successMessage: `Assigned token: ${token} for ${email}`,
         });

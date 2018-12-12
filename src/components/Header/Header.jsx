@@ -27,7 +27,7 @@ class MenuAppBar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, userId } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -36,7 +36,7 @@ class MenuAppBar extends React.Component {
         <AppBar position="static">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              {/* <MenuIcon /> */} Menu
+              =
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
             </Typography>
@@ -47,7 +47,7 @@ class MenuAppBar extends React.Component {
                 onClick={this.handleMenu}
                 color="inherit"
               >
-                User Name | Icon
+                {userId}
               </IconButton>
               <Menu
                 id="menu-appbar"

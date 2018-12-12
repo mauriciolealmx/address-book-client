@@ -33,7 +33,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header />
+        <Header userId={this.state.userId} />
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <Register />

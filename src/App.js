@@ -4,6 +4,7 @@ import CreateContact from './components/CreateContact';
 import Login from './components/Login';
 import logo from './logo.svg';
 import Register from './components/Register';
+import Header from './components/Header/Header';
 import './App.css';
 
 export default class App extends Component {
@@ -32,12 +33,13 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        <Header />
+        <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <Register />
           <CreateContact userJwtToken={this.state.userJwtToken} userId={this.state.userId} />
           <Login updateToken={this.updateToken} updateUserId={this.updateUserId} />
-        </header>
+        </div>
       </div>
     );
   }

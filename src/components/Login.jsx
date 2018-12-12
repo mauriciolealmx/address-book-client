@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import capitalize from 'lodash/capitalize';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -28,9 +29,10 @@ export default class CreateContact extends Component {
       .then(res => {
         const { updateToken, updateUserId } = this.props;
         const { token, email } = res.data;
-        
+
+        const userId = capitalize(getEmailId(email))
         updateToken(token);
-        updateUserId(getEmailId(email));
+        updateUserId(userId);
         this.setState({
           successMessage: `Assigned token: ${token} for ${email}`,
         });

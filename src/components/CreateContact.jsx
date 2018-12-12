@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import capitalize from 'lodash/capitalize';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -20,12 +21,14 @@ export default class CreateContact extends Component {
   handleSubmit() {
     const { contactName, contactLastName, contactEmail } = this.state;
     const { userJwtToken, userId } = this.props;
+
     const contact = {
-      email: contactEmail,
-      firstName: contactName,
-      lastName: contactLastName,
+      email: contactEmail.toLowerCase(),
+      firstName: capitalize(contactName),
+      lastName: capitalize(contactLastName),
       token: userJwtToken,
     };
+    
     axios
       .post(`/users/${userId}/contacts`, contact)
       .then(res => {

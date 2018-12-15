@@ -5,6 +5,8 @@ import capitalize from 'lodash/capitalize';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import { getUserContacts } from './GetUsers';
+
 export default class CreateContact extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ export default class CreateContact extends Component {
 
   handleSubmit() {
     const { contactName, contactLastName, contactEmail } = this.state;
-    const { userJwtToken, userId } = this.props;
+    const { userJwtToken, userId, updateContacts } = this.props;
 
     const contact = {
       email: contactEmail.toLowerCase(),
@@ -28,7 +30,7 @@ export default class CreateContact extends Component {
       lastName: capitalize(contactLastName),
       token: userJwtToken,
     };
-    
+
     axios
       .post(`/users/${userId}/contacts`, contact)
       .then(res => {
@@ -36,6 +38,8 @@ export default class CreateContact extends Component {
         const feedbackMessage = !firstName
           ? 'User needs to be Logged in order to create a contact.'
           : `User ${firstName} was added to ${userId}`;
+
+        getUserContacts(userJwtToken, userId).then(updateContacts);
 
         this.setState({
           feedbackMessage,

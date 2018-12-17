@@ -5,6 +5,8 @@ import capitalize from 'lodash/capitalize';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import { getUserContacts } from './GetUsers';
+
 const getEmailId = email => email.split('@')[0];
 
 export default class CreateContact extends Component {
@@ -27,12 +29,16 @@ export default class CreateContact extends Component {
     axios
       .post('/login', user)
       .then(res => {
-        const { updateToken, updateUserId } = this.props;
+        const { updateToken, updateUserId, updateContacts } = this.props;
         const { token, email } = res.data;
 
-        const userId = capitalize(getEmailId(email))
+        const userId = capitalize(getEmailId(email));
         updateToken(token);
         updateUserId(userId);
+        getUserContacts(token, userId).then(res => {
+          updateContacts(res);
+        });
+
         this.setState({
           successMessage: `Assigned token: ${token} for ${email}`,
         });

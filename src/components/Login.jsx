@@ -9,12 +9,18 @@ import { getUserContacts } from './GetUsers';
 
 const getEmailId = email => email.split('@')[0];
 
+const isValidEmail = email => {
+  const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(email);
+};
+
 export default class CreateContact extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
+      isValidEmail: true,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +28,18 @@ export default class CreateContact extends Component {
 
   handleSubmit() {
     const { email, password } = this.state;
+
+    if (!isValidEmail(email)) {
+      this.setState({
+        isValidEmail: false,
+      });
+      return;
+    }
+
+    this.setState({
+      isValidEmail: true,
+    });
+
     const user = {
       email,
       password,
@@ -87,6 +105,7 @@ export default class CreateContact extends Component {
           </Button>
         </form>
         {successMessage && <div>{successMessage}</div>}
+        {!this.state.isValidEmail && <div>Please Enter a valid Email address</div>}
       </div>
     );
   }

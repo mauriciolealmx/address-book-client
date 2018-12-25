@@ -75,33 +75,25 @@ export default class CreateContact extends Component {
   render() {
     const { successMessage } = this.state;
     return (
-      <div style={{ display: 'inline-block' }}>
+      <div>
         <form>
           <TextField
-            id="standard-email"
+            autoComplete="email"
+            fullWidth
             label="Email"
+            margin="normal"
             onChange={event => this.handleChange('email', event)}
             value={this.state.email}
-            margin="normal"
           />
           <TextField
-            id="standard-password"
+            fullWidth
             label="Password"
+            margin="normal"
             onChange={event => this.handleChange('password', event)}
             value={this.state.password}
-            margin="normal"
-            style={{ marginLeft: '20px' }}
           />
-          <Button
-            color="primary"
-            onClick={this.handleSubmit}
-            variant="outlined"
-            style={{
-              display: 'block',
-              width: '100%',
-            }}
-          >
-            Login
+          <Button color="primary" fullWidth onClick={this.handleSubmit} variant="outlined">
+            SIGN IN
           </Button>
         </form>
         {successMessage && <div>{successMessage}</div>}

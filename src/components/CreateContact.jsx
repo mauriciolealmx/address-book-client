@@ -1,19 +1,46 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import capitalize from 'lodash/capitalize';
+import { style } from 'typestyle';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import { getUserContacts } from './GetUsers';
 
+const styles = {
+  textField: {
+    root: style({
+      marginLeft: '20px',
+    }),
+  },
+
+  button: style({
+    display: 'block',
+    margin: 'auto',
+  }),
+};
+
+function createContact(userId, contact) {
+  return axios
+    .post(`/users/${userId}/contacts`, contact)
+    .then(res => res.data)
+    .catch(err => {
+      console.error(`Unable to create contact for ${userId}`, err.message);
+    });
+}
+
+const initialState = {
+  contactEmail: '',
+  contactLastName: '',
+  contactName: '',
+};
+
 export default class CreateContact extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contactEmail: '',
-      contactLastName: '',
-      contactName: '',
+      ...initialState,
       feedbackMessage: '',
     };
 
@@ -31,23 +58,21 @@ export default class CreateContact extends Component {
       token: userJwtToken,
     };
 
-    axios
-      .post(`/users/${userId}/contacts`, contact)
-      .then(res => {
-        const { firstName } = res.data;
-        const feedbackMessage = !firstName
-          ? 'User needs to be Logged in order to create a contact.'
-          : `User ${firstName} was added to ${userId}`;
+    createContact(userId, contact).then(contact => {
+      const { firstName } = contact;
+      const feedbackMessage = `User ${firstName} was added to ${userId}`;
 
-        getUserContacts(userJwtToken, userId).then(updateContacts);
-
+      getUserContacts(userJwtToken, userId).then(res => {
+        updateContacts(res);
         this.setState({
-          feedbackMessage,
+          ...initialState,
         });
-      })
-      .catch(err => {
-        console.error(`Unable to create contact for ${userId}`, err.message);
       });
+
+      this.setState({
+        feedbackMessage,
+      });
+    });
   }
 
   handleChange(key, e) {
@@ -62,38 +87,27 @@ export default class CreateContact extends Component {
       <div>
         <form>
           <TextField
-            id="standard-text"
+            classes={styles.textField}
             label="Name"
+            margin="normal"
             onChange={event => this.handleChange('contactName', event)}
             value={this.state.contactName}
-            margin="normal"
-            style={{ marginLeft: '20px' }}
           />
           <TextField
-            id="standard-text"
+            classes={styles.textField}
             label="Last Name"
+            margin="normal"
             onChange={event => this.handleChange('contactLastName', event)}
             value={this.state.contactLastName}
-            margin="normal"
-            style={{ marginLeft: '20px' }}
           />
           <TextField
-            id="standard-text"
+            classes={styles.textField}
             label="Email Address"
+            margin="normal"
             onChange={event => this.handleChange('contactEmail', event)}
             value={this.state.contactEmail}
-            margin="normal"
-            style={{ marginLeft: '20px' }}
           />
-          <Button
-            color="primary"
-            onClick={this.handleSubmit}
-            variant="outlined"
-            style={{
-              display: 'block',
-              margin: 'auto',
-            }}
-          >
+          <Button color="primary" onClick={this.handleSubmit} variant="outlined" className={styles.button}>
             Create Contact
           </Button>
         </form>

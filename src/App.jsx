@@ -4,12 +4,14 @@ import cloneDeep from 'lodash/cloneDeep';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 import CreateContact from './components/CreateContact';
 import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header/Header';
 import Contacts from './components/Contacts/Contacts';
+import DeleteContact from './components/DeleteContact';
 import './App.css';
 
 import styles from './App.styles';
@@ -24,11 +26,11 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = cloneDeep(initialState);
-    this.updateToken = this.updateToken.bind(this);
-    this.updateUserId = this.updateUserId.bind(this);
-    this.updateContacts = this.updateContacts.bind(this);
     this.createSignInToggle = this.createSignInToggle.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.updateContacts = this.updateContacts.bind(this);
+    this.updateToken = this.updateToken.bind(this);
+    this.updateUserId = this.updateUserId.bind(this);
   }
 
   updateToken(jwtToken) {
@@ -71,12 +73,17 @@ export default class App extends Component {
         <Header userId={userId} isLoggedIn={this.isLoggedIn()} logOut={this.logOut} />
         <div className="App-header">
           {isLoggedIn ? (
-            <CreateContact userJwtToken={userJwtToken} userId={userId} updateContacts={this.updateContacts} />
+            <React.Fragment>
+              <CreateContact userJwtToken={userJwtToken} userId={userId} updateContacts={this.updateContacts} />
+              <DeleteContact userJwtToken={userJwtToken} userId={userId} updateContacts={this.updateContacts} />
+            </React.Fragment>
           ) : (
             <Paper classes={{ root: styles.root }}>
               {signIn ? (
                 <React.Fragment>
-                  <h1>Sign In</h1>
+                  <Typography component="h1" variant="h5" style={{ padding: '35px' }}>
+                    Sign in
+                  </Typography>
                   <Login
                     updateToken={this.updateToken}
                     updateUserId={this.updateUserId}
@@ -90,7 +97,9 @@ export default class App extends Component {
                 </React.Fragment>
               ) : (
                 <React.Fragment>
-                  <h1>Create Account</h1>
+                  <Typography component="h1" variant="h5" style={{ padding: '35px' }}>
+                    Create account
+                  </Typography>
                   <Register />
                   <CardContent>
                     <Button onClick={this.createSignInToggle} color="primary">

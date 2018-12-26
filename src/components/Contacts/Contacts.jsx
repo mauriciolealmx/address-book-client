@@ -12,11 +12,15 @@ class VirtualizedTable extends React.PureComponent {
   headerHeight = 56;
   rowHeight = 56;
 
+  handleRowClick = rowData => {
+    console.log(rowData);
+  };
+
   getRowClassName = ({ index }) => {
     const { rowClassName, onRowClick } = this.props;
     // Hover color will only show if rows have a onRowClick callback.
     return classNames(styles.tableRow, styles.flexContainer, rowClassName, {
-      [styles.tableRowHover]: index !== -1 && onRowClick != null,
+      [styles.tableRowHover]: index !== -1 && this.handleRowClick,
     });
   };
 
@@ -78,7 +82,7 @@ class VirtualizedTable extends React.PureComponent {
             className={styles.table}
             headerHeight={this.headerHeight}
             height={height}
-            onRowClick={event => console.log(event)}
+            onRowClick={this.handleRowClick}
             rowClassName={this.getRowClassName}
             rowCount={contacts.length}
             rowGetter={({ index }) => contacts[index]}

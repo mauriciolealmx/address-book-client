@@ -5,14 +5,14 @@ import { AutoSizer, Column, Table } from 'react-virtualized';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 
-import stylesss from './Contacts.styles';
+import styles from './Contacts.styles';
 
 class MuiVirtualizedTable extends React.PureComponent {
   getRowClassName = ({ index }) => {
     const { rowClassName, onRowClick } = this.props;
     // Hover color will only show if rows have a onRowClick callback.
-    return classNames(stylesss.tableRow, stylesss.flexContainer, rowClassName, {
-      [stylesss.tableRowHover]: index !== -1 && onRowClick != null,
+    return classNames(styles.tableRow, styles.flexContainer, rowClassName, {
+      [styles.tableRowHover]: index !== -1 && onRowClick != null,
     });
   };
 
@@ -21,7 +21,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     const isNumeric = (columnIndex && columns[columnIndex].numeric) || false;
     return (
       <TableCell
-        className={classNames(stylesss.tableCell, stylesss.flexContainer, { [stylesss.noClick]: onRowClick == null })}
+        className={classNames(styles.tableCell, styles.flexContainer, { [styles.noClick]: onRowClick == null })}
         component="div"
         numeric={isNumeric}
         style={{ height: rowHeight }}
@@ -37,7 +37,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     const isNumeric = (columnIndex && columns[columnIndex].numeric) || false;
     return (
       <TableCell
-        className={classNames(stylesss.tableCell, stylesss.flexContainer, stylesss.noClick)}
+        className={classNames(styles.tableCell, styles.flexContainer, styles.noClick)}
         component="div"
         numeric={isNumeric}
         style={{ height: headerHeight }}
@@ -48,33 +48,37 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
 
+  columnRendered(columns) {
+    return columns.map(({ className, dataKey, ...other }, index) => (
+      <Column
+        key={dataKey}
+        headerRenderer={headerProps =>
+          this.headerRenderer({
+            ...headerProps,
+            columnIndex: index,
+          })
+        }
+        className={classNames(styles.flexContainer, className)}
+        cellRenderer={this.cellRenderer}
+        dataKey={dataKey}
+        {...other}
+      />
+    ));
+  }
+
   render() {
     const { columns, ...tableProps } = this.props;
     return (
       <AutoSizer>
         {({ height, width }) => (
           <Table
-            className={stylesss.table}
+            className={styles.table}
             height={height}
             rowClassName={this.getRowClassName}
             width={width}
             {...tableProps}
           >
-            {columns.map(({ className, dataKey, ...other }, index) => (
-              <Column
-                key={dataKey}
-                headerRenderer={headerProps =>
-                  this.headerRenderer({
-                    ...headerProps,
-                    columnIndex: index,
-                  })
-                }
-                className={classNames(stylesss.flexContainer, className)}
-                cellRenderer={this.cellRenderer}
-                dataKey={dataKey}
-                {...other}
-              />
-            ))}
+            {this.columnRendered(columns)}
           </Table>
         )}
       </AutoSizer>
@@ -112,7 +116,7 @@ const columnConfig = [
 export default function VirtualizedContacts(props) {
   const { contacts } = props;
   return (
-    <Paper className={stylesss.paperRoot}>
+    <Paper className={styles.paperRoot}>
       <MuiVirtualizedTable
         columns={columnConfig}
         headerHeight={56}

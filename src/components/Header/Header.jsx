@@ -1,8 +1,10 @@
 import React from 'react';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+
 import { styles } from "./Header.styles";
 
 function ButtonAppBar(props) {
@@ -16,7 +18,7 @@ function ButtonAppBar(props) {
             Welcome!
           </Typography>
           {props.isLoggedIn && <Button onClick={props.logOut} color="inherit">{'Logout'}</Button>}
-          <Button color="inherit">{userId || 'LOGIN'}</Button>
+          {userId && <Button color="inherit">{userId}</Button>}
         </Toolbar>
       </AppBar>
     </div>

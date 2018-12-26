@@ -15,6 +15,7 @@ export default {
   table: style({
     $debugName: 'table',
     minWidth: 700,
+    fontFamily: 'auto', // has a theme
   }),
 
   tableCell: style({
@@ -39,9 +40,5 @@ export default {
 
   noClick: style({
     cursor: 'initial',
-  }),
-
-  table: style({
-    fontFamily: 'auto', // has a theme
   }),
 };

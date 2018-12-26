@@ -70,7 +70,7 @@ class VirtualizedTable extends React.PureComponent {
   }
 
   render() {
-    const { contacts, ...tableProps } = this.props;
+    const { contacts } = this.props;
     return (
       <AutoSizer>
         {({ height, width }) => (

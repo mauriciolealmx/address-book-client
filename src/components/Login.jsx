@@ -90,6 +90,7 @@ export default class CreateContact extends Component {
             label="Password"
             margin="normal"
             onChange={event => this.handleChange('password', event)}
+            type="password"
             value={this.state.password}
           />
           <Button color="primary" fullWidth onClick={this.handleSubmit} variant="outlined">

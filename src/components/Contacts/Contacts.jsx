@@ -5,9 +5,13 @@ import { AutoSizer, Column, Table } from 'react-virtualized';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 
+import columnsConfig from './Contacts.config';
 import styles from './Contacts.styles';
 
-class MuiVirtualizedTable extends React.PureComponent {
+class VirtualizedTable extends React.PureComponent {
+  headerHeight = 56;
+  rowHeight = 56;
+
   getRowClassName = ({ index }) => {
     const { rowClassName, onRowClick } = this.props;
     // Hover color will only show if rows have a onRowClick callback.
@@ -17,14 +21,14 @@ class MuiVirtualizedTable extends React.PureComponent {
   };
 
   cellRenderer = ({ cellData, columnIndex = null }) => {
-    const { columns, onRowClick, rowHeight } = this.props;
-    const isNumeric = (columnIndex && columns[columnIndex].numeric) || false;
+    const { onRowClick } = this.props;
+    const isNumeric = (columnIndex && columnsConfig[columnIndex].numeric) || false;
     return (
       <TableCell
         className={classNames(styles.tableCell, styles.flexContainer, { [styles.noClick]: onRowClick == null })}
         component="div"
         numeric={isNumeric}
-        style={{ height: rowHeight }}
+        style={{ height: this.rowHeight }}
         variant="body"
       >
         {cellData}
@@ -33,14 +37,13 @@ class MuiVirtualizedTable extends React.PureComponent {
   };
 
   headerRenderer = ({ label, columnIndex }) => {
-    const { columns, headerHeight } = this.props;
-    const isNumeric = (columnIndex && columns[columnIndex].numeric) || false;
+    const isNumeric = (columnIndex && columnsConfig[columnIndex].numeric) || false;
     return (
       <TableCell
         className={classNames(styles.tableCell, styles.flexContainer, styles.noClick)}
         component="div"
         numeric={isNumeric}
-        style={{ height: headerHeight }}
+        style={{ height: this.headerHeight }}
         variant="head"
       >
         {label}
@@ -67,18 +70,22 @@ class MuiVirtualizedTable extends React.PureComponent {
   }
 
   render() {
-    const { columns, ...tableProps } = this.props;
+    const { contacts, ...tableProps } = this.props;
     return (
       <AutoSizer>
         {({ height, width }) => (
           <Table
             className={styles.table}
+            headerHeight={this.headerHeight}
             height={height}
+            onRowClick={event => console.log(event)}
             rowClassName={this.getRowClassName}
+            rowCount={contacts.length}
+            rowGetter={({ index }) => contacts[index]}
+            rowHeight={this.rowHeight}
             width={width}
-            {...tableProps}
           >
-            {this.columnRendered(columns)}
+            {this.columnRendered(columnsConfig)}
           </Table>
         )}
       </AutoSizer>
@@ -86,45 +93,8 @@ class MuiVirtualizedTable extends React.PureComponent {
   }
 }
 
-const columnConfig = [
-  {
-    width: 200,
-    flexGrow: 1,
-    label: 'Contact',
-    dataKey: 'firstName',
-  },
-  {
-    width: 120,
-    flexGrow: 1,
-    label: 'Name',
-    dataKey: 'firstName',
-  },
-  {
-    width: 120,
-    flexGrow: 1,
-    label: 'Last',
-    dataKey: 'lastName',
-  },
-  {
-    width: 120,
-    flexGrow: 1,
-    label: 'Email',
-    dataKey: 'email',
-  },
-];
-
-export default function VirtualizedContacts(props) {
-  const { contacts } = props;
-  return (
-    <Paper className={styles.paperRoot}>
-      <MuiVirtualizedTable
-        columns={columnConfig}
-        headerHeight={56}
-        onRowClick={event => console.log(event)}
-        rowCount={contacts.length}
-        rowGetter={({ index }) => contacts[index]}
-        rowHeight={56}
-      />
-    </Paper>
-  );
-}
+export default props => (
+  <Paper className={styles.paperRoot}>
+    <VirtualizedTable contacts={props.contacts} />
+  </Paper>
+);

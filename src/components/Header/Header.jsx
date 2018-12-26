@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { styles } from "./Header.styles";
+import { styles } from './Header.styles';
 
 function ButtonAppBar(props) {
   const { userId } = props;
@@ -13,11 +13,15 @@ function ButtonAppBar(props) {
     <div style={styles.root}>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit">=</Button>
+          {props.isLoggedIn && <Button color="inherit">=</Button>}
           <Typography variant="h6" color="inherit" style={styles.grow}>
-            Welcome!
+            Address Book
           </Typography>
-          {props.isLoggedIn && <Button onClick={props.logOut} color="inherit">{'Logout'}</Button>}
+          {props.isLoggedIn && (
+            <Button onClick={props.logOut} color="inherit">
+              {'Logout'}
+            </Button>
+          )}
           {userId && <Button color="inherit">{userId}</Button>}
         </Toolbar>
       </AppBar>

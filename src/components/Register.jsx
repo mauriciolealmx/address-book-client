@@ -4,6 +4,13 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+function createAccount(user) {
+  return axios
+    .post('/register', user)
+    .then(res => res.data)
+    .catch(err => console.error(`Could not register user: ${err}`));
+}
+
 export default class Register extends Component {
   constructor(props) {
     super(props);
@@ -27,10 +34,9 @@ export default class Register extends Component {
     const { email, password } = this.state;
     const user = { email, password };
 
-    axios
-      .post('/register', user)
-      .then(res => {
-        const { email } = res.data;
+    createAccount(user)
+      .then(user => {
+        const { email } = user;
         this.setState({
           successMessage: `Registered user ${email}`,
         });
@@ -51,31 +57,22 @@ export default class Register extends Component {
       <div style={{ display: 'inline-block' }}>
         <form noValidate autoComplete="off">
           <TextField
-            id="standard-email"
+            autoComplete="email"
+            fullWidth
             label="Email"
+            margin="normal"
             onChange={event => this.handleChange('email', event)}
             value={this.state.email}
-            margin="normal"
           />
           <TextField
-            id="standard-password-input"
+            fullWidth
             label="Password"
-            type="text"
-            onChange={event => this.handleChange('password', event)}
-            value={this.state.password}
             margin="normal"
-            style={{ marginLeft: '20px' }}
+            onChange={event => this.handleChange('password', event)}
+            type="password"
+            value={this.state.password}
           />
-          <Button
-            color="primary"
-            onClick={this.handleSubmit}
-            variant="outlined"
-            style={{
-              display: 'block',
-              margin: 'auto',
-              width: '100%',
-            }}
-          >
+          <Button color="primary" onClick={this.handleSubmit} variant="outlined" fullWidth>
             Submit
           </Button>
         </form>

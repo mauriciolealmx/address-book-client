@@ -5,10 +5,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 function createAccount(user) {
-  return axios
-    .post('/register', user)
-    .then(res => res.data)
-    .catch(err => console.error(`Could not register user: ${err}`));
+  return axios.post('/register', user).then(res => res.data);
 }
 
 export default class Register extends Component {
@@ -42,10 +39,9 @@ export default class Register extends Component {
         });
       })
       .catch(err => {
-        const serverError = `Could not register user: ${err}`;
-        console.error(serverError);
+        const { data } = err.response;
         this.setState({
-          serverError,
+          serverError: data.error,
         });
       });
   }

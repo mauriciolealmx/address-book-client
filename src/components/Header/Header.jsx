@@ -18,11 +18,13 @@ function ButtonAppBar(props) {
             Address Book
           </Typography>
           {props.isLoggedIn && (
-            <Button onClick={props.logOut} color="inherit">
-              {'Logout'}
-            </Button>
+            <div>
+              <Button onClick={props.logOut} color="inherit">
+                {'Logout'}
+              </Button>
+              <Button color="inherit">{userId}</Button>
+            </div>
           )}
-          {userId && <Button color="inherit">{userId}</Button>}
         </Toolbar>
       </AppBar>
     </div>

@@ -83,9 +83,11 @@ export default class CreateContact extends Component {
             label="Email"
             margin="normal"
             onChange={event => this.handleChange('email', event)}
+            type="email"
             value={this.state.email}
           />
           <TextField
+            autoComplete="current-password"
             fullWidth
             label="Password"
             margin="normal"

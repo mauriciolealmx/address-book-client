@@ -8,15 +8,17 @@ function createAccount(user) {
   return axios.post('/register', user).then(res => res.data);
 }
 
+const initialState = {
+  email: '',
+  password: '',
+  serverError: '',
+  successMessage: '',
+};
+
 export default class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      email: '',
-      password: '',
-      serverError: '',
-      successMessage: '',
-    };
+    this.state = initialState;
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -35,6 +37,7 @@ export default class Register extends Component {
       .then(user => {
         const { email } = user;
         this.setState({
+          ...initialState,
           successMessage: `Registered user ${email}`,
         });
       })
@@ -42,6 +45,7 @@ export default class Register extends Component {
         const { data } = err.response;
         this.setState({
           serverError: data.error,
+          successMessage: '',
         });
       });
   }

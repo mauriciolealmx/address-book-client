@@ -46,18 +46,13 @@ export default class CreateContact extends Component {
     axios
       .post('/login', user)
       .then(res => {
-        const { updateToken, updateUserId, updateContacts } = this.props;
-        const { token, email } = res.data;
+        const { updateUserId, updateContacts } = this.props;
+        const { email } = res.data;
 
         const userId = capitalize(getEmailId(email));
-        updateToken(token);
         updateUserId(userId);
-        getUserContacts(token, userId).then(res => {
+        getUserContacts(userId).then(res => {
           updateContacts(res);
-        });
-
-        this.setState({
-          successMessage: `Assigned token: ${token} for ${email}`,
         });
       })
       .catch(err => {

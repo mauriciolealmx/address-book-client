@@ -39,16 +39,22 @@ export default class DeleteContact extends Component {
 
   handleSubmit() {
     const { contactName, contactLastName } = this.state;
-    const { userJwtToken, userId, updateContacts } = this.props;
+    const { userId, updateContacts } = this.props;
 
     const contact = {
       firstName: capitalize(contactName),
       lastName: capitalize(contactLastName),
-      token: userJwtToken,
     };
 
     deleteContact(userId, contact).then(res => {
-      getUserContacts(userJwtToken, userId).then(res => {
+      if (!res) {
+        this.setState({
+          feedbackMessage: 'Contact does not exist.',
+        });
+        return;
+      }
+
+      getUserContacts(userId).then(res => {
         updateContacts(res);
         this.setState({
           ...initialState,

@@ -19,7 +19,6 @@ import styles from './App.styles';
 const initialState = {
   userContacts: [],
   userId: '',
-  userJwtToken: '',
   signIn: true,
 };
 
@@ -30,14 +29,7 @@ export default class App extends Component {
     this.createSignInToggle = this.createSignInToggle.bind(this);
     this.logOut = this.logOut.bind(this);
     this.updateContacts = this.updateContacts.bind(this);
-    this.updateToken = this.updateToken.bind(this);
     this.updateUserId = this.updateUserId.bind(this);
-  }
-
-  updateToken(jwtToken) {
-    this.setState({
-      userJwtToken: jwtToken,
-    });
   }
 
   updateUserId(userId) {
@@ -53,8 +45,8 @@ export default class App extends Component {
   }
 
   isLoggedIn() {
-    const { userJwtToken, userId } = this.state;
-    return userJwtToken && userId;
+    const { userId } = this.state;
+    return  !!userId;
   }
 
   logOut() {
@@ -66,7 +58,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { userJwtToken, userId, userContacts, signIn } = this.state;
+    const { userId, userContacts, signIn } = this.state;
     const hasContacts = userContacts.length > 0;
     const isLoggedIn = this.isLoggedIn();
     return (
@@ -75,8 +67,8 @@ export default class App extends Component {
         <div className="App-header">
           {isLoggedIn ? (
             <React.Fragment>
-              <CreateContact userJwtToken={userJwtToken} userId={userId} updateContacts={this.updateContacts} />
-              <DeleteContact userJwtToken={userJwtToken} userId={userId} updateContacts={this.updateContacts} />
+              <CreateContact userId={userId} updateContacts={this.updateContacts} />
+              <DeleteContact userId={userId} updateContacts={this.updateContacts} />
             </React.Fragment>
           ) : (
             <Paper classes={{ root: styles.root }}>
@@ -86,7 +78,6 @@ export default class App extends Component {
                     Sign in
                   </Typography>
                   <Login
-                    updateToken={this.updateToken}
                     updateUserId={this.updateUserId}
                     updateContacts={this.updateContacts}
                   />

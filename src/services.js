@@ -18,13 +18,13 @@ export function deleteContact(userId, contact) {
     .put(`/users/${userId}/contacts`, contact)
     .then(res => res.data)
     .catch(err => {
-      console.error(`Unable to create contact for ${userId}`, err.message);
+      console.error(`Unable to delete contact for ${userId}`, err.message);
     });
 }
 
-export function getUserContacts(userJwtToken, userId) {
+export function getUserContacts(userId) {
   return axios
-    .get(`/users/${userId}/contacts?token=${userJwtToken}`)
+    .get(`/users/${userId}/contacts`)
     .then(res => res.data)
     .catch(err => {
       console.error(`Unable to get contact for ${userId}`, err.message);

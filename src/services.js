@@ -4,6 +4,10 @@ export function createAccount(user) {
   return axios.post('/register', user).then(res => res.data);
 }
 
+export function login(user) {
+  return axios.post('/login', user).then(res => res.data);
+}
+
 export function createContact(userId, contact) {
   return axios
     .post(`/users/${userId}/contacts`, contact)

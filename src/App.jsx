@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-
+import Contacts from './components/Contacts/Contacts';
 import CreateContact from './components/CreateContact';
+import DeleteContact from './components/DeleteContact';
+import Header from './components/Header/Header';
 import Login from './components/Login';
 import Register from './components/Register';
-import Header from './components/Header/Header';
-import Contacts from './components/Contacts/Contacts';
-import DeleteContact from './components/DeleteContact';
 import './App.css';
 
 const initialState = {
@@ -64,37 +59,14 @@ export default class App extends Component {
               <CreateContact userId={userId} updateContacts={this.updateContacts} />
               <DeleteContact userId={userId} updateContacts={this.updateContacts} />
             </React.Fragment>
+          ) : signIn ? (
+            <Login
+              updateUserId={this.updateUserId}
+              updateContacts={this.updateContacts}
+              alternativeButtonAction={this.createSignInToggle}
+            />
           ) : (
-            <Paper classes={{ root: styles.root }}>
-              {signIn ? (
-                <React.Fragment>
-                  <Typography component="h1" variant="h5" style={{ padding: '35px' }}>
-                    Sign in
-                  </Typography>
-                  <Login
-                    updateUserId={this.updateUserId}
-                    updateContacts={this.updateContacts}
-                  />
-                  <CardContent>
-                    <Button onClick={this.createSignInToggle} color="primary">
-                      Create account
-                    </Button>
-                  </CardContent>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <Typography component="h1" variant="h5" style={{ padding: '35px' }}>
-                    Create account
-                  </Typography>
-                  <Register />
-                  <CardContent>
-                    <Button onClick={this.createSignInToggle} color="primary">
-                      Sign In
-                    </Button>
-                  </CardContent>
-                </React.Fragment>
-              )}
-            </Paper>
+            <Register alternativeButtonAction={this.createSignInToggle} />
           )}
           <hr />
           {hasContacts && <Contacts contacts={userContacts} />}

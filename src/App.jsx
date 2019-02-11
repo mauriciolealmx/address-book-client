@@ -14,8 +14,6 @@ import Contacts from './components/Contacts/Contacts';
 import DeleteContact from './components/DeleteContact';
 import './App.css';
 
-import styles from './App.styles';
-
 const initialState = {
   userContacts: [],
   userId: '',
@@ -26,34 +24,30 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = cloneDeep(initialState);
-    this.createSignInToggle = this.createSignInToggle.bind(this);
-    this.logOut = this.logOut.bind(this);
-    this.updateContacts = this.updateContacts.bind(this);
-    this.updateUserId = this.updateUserId.bind(this);
   }
 
-  updateUserId(userId) {
+  updateUserId = userId => {
     this.setState({
       userId,
     });
   }
 
-  updateContacts(userContacts) {
+  updateContacts = userContacts => {
     this.setState({
       userContacts,
     });
   }
 
-  isLoggedIn() {
+  isLoggedIn = () => {
     const { userId } = this.state;
-    return  !!userId;
+    return !!userId;
   }
 
-  logOut() {
+  logOut = () => {
     this.setState(cloneDeep(initialState));
   }
 
-  createSignInToggle() {
+  createSignInToggle = () => {
     this.setState(prevState => ({ signIn: !prevState.signIn }));
   }
 

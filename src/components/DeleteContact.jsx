@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import capitalize from 'lodash/capitalize';
 import { style } from 'typestyle';
 
@@ -28,16 +27,9 @@ const initialState = {
 };
 
 export default class DeleteContact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...initialState,
-    };
+  state = { ...initialState }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit() {
+  handleSubmit = () => {
     const { contactName, contactLastName } = this.state;
     const { userId, updateContacts } = this.props;
 
@@ -70,7 +62,7 @@ export default class DeleteContact extends Component {
   }
 
   render() {
-    const { feedbackMessage } = this.state;
+    const { contactLastName, contactName, feedbackMessage } = this.state;
     return (
       <div>
         <form>
@@ -79,14 +71,14 @@ export default class DeleteContact extends Component {
             label="Name"
             margin="normal"
             onChange={event => this.handleChange('contactName', event)}
-            value={this.state.contactName}
+            value={contactName}
           />
           <TextField
             classes={styles.textField}
             label="Last Name"
             margin="normal"
             onChange={event => this.handleChange('contactLastName', event)}
-            value={this.state.contactLastName}
+            value={contactLastName}
           />
           <Button color="primary" onClick={this.handleSubmit} variant="outlined" className={styles.button}>
             Delete Contact

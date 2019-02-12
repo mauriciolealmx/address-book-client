@@ -7,7 +7,7 @@
   height: 20vmin;
 }
 
-.App-header {
+.App-content {
   background-color: #ffffff;
   min-height: 91vh; /* TODO: This was 100vh - Should not be called App-header anymore */
   display: flex;

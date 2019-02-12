@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 
-import Contacts from './Contacts/Contacts';
-import CreateContact from './CreateContact';
-import DeleteContact from './DeleteContact';
 import Header from './Header/Header';
 import Login from './Login';
 import Register from './Register';
 import './App.css';
+import AddressBook from './AddressBook/AddressBook';
 
 const initialState = {
   userContacts: [],
@@ -27,12 +25,6 @@ export default class App extends Component {
     });
   }
 
-  updateContacts = userContacts => {
-    this.setState({
-      userContacts,
-    });
-  }
-
   isLoggedIn = () => {
     const { userId } = this.state;
     return !!userId;
@@ -48,28 +40,18 @@ export default class App extends Component {
 
   render() {
     const { userId, userContacts, signIn } = this.state;
-    const hasContacts = userContacts.length > 0;
     const isLoggedIn = this.isLoggedIn();
     return (
       <div className="App">
         <Header userId={userId} isLoggedIn={this.isLoggedIn()} logOut={this.logOut} />
-        <div className="App-header">
+        <div className="App-content">
           {isLoggedIn ? (
-            <React.Fragment>
-              <CreateContact userId={userId} updateContacts={this.updateContacts} />
-              <DeleteContact userId={userId} updateContacts={this.updateContacts} />
-            </React.Fragment>
+            <AddressBook userId={userId} userContacts={userContacts} />
           ) : signIn ? (
-            <Login
-              updateUserId={this.updateUserId}
-              updateContacts={this.updateContacts}
-              alternativeButtonAction={this.createSignInToggle}
-            />
+            <Login updateUserId={this.updateUserId} alternativeButtonAction={this.createSignInToggle} />
           ) : (
             <Register alternativeButtonAction={this.createSignInToggle} />
           )}
-          <hr />
-          {hasContacts && <Contacts contacts={userContacts} />}
         </div>
       </div>
     );

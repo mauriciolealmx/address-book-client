@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import capitalize from 'lodash/capitalize';
 
 import ActionForm from './ActionForm/ActionForm';
-import { getUserContacts, login } from '../services';
+import { login } from '../services';
 
 const getEmailId = email => email.split('@')[0];
 
@@ -17,23 +17,19 @@ const getEmailId = email => email.split('@')[0];
 //   },
 // };
 
-export default class CreateContact extends Component {
+export default class Login extends Component {
   handleSubmit = async user => {
     const { email } = await login(user);
-
     const userId = capitalize(getEmailId(email));
-    const contacts = await getUserContacts(userId);
-
-    this.updateAppState(contacts, userId);
+    this.updateAppState(userId);
     // TODO: Need the error message.
     // console.error(`Unable to login user ${user.email}`, err.message);
-  };
+  }
 
-  updateAppState = (contacts, userId) => {
-    const { updateUserId, updateContacts } = this.props;
-    updateContacts(contacts);
+  updateAppState = userId => {
+    const { updateUserId } = this.props;
     updateUserId(userId);
-  };
+  }
 
   render() {
     // const { successMessage } = this.state;

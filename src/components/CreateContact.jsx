@@ -24,22 +24,15 @@ const initialState = {
   contactEmail: '',
   contactLastName: '',
   contactName: '',
+  feedbackMessage: '',
 };
 
 export default class CreateContact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...initialState,
-      feedbackMessage: '',
-    };
+  state = { ...initialState }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit() {
+  handleSubmit = async () => {
     const { contactName, contactLastName, contactEmail } = this.state;
-    const { userId, updateContacts } = this.props;
+    const { userId } = this.props;
 
     const contact = {
       email: contactEmail.toLowerCase(),
@@ -47,29 +40,25 @@ export default class CreateContact extends Component {
       lastName: capitalize(contactLastName),
     };
 
-    createContact(userId, contact).then(resp => {
-      let feedbackMessage;
-      if (!resp) {
-        feedbackMessage = `Contact ${contactName} already exists.`;
-        this.setState({
-          feedbackMessage,
-        });
-        return;
-      }
-      
-      const { firstName } = contact;
-      feedbackMessage = `User ${firstName} was added to ${userId}`;
-      getUserContacts(userId).then(res => {
-        updateContacts(res);
-        this.setState({
-          ...initialState,
-        });
-      });
-
+    const createdContact = await createContact(userId, contact);
+    if (!createdContact) {
       this.setState({
-        feedbackMessage,
+        feedbackMessage: `Contact ${contactName} already exists.`,
       });
+      return;
+    }
+
+    this.setState({
+      ...initialState,
+      feedbackMessage: `User ${createdContact.firstName} was added to ${userId}`,
     });
+    this.updateAppState();
+  }
+
+  updateAppState = async () => {
+    const { updateContacts, userId } = this.props;
+    const contacts = await getUserContacts(userId);
+    updateContacts(contacts);
   }
 
   handleChange(key, e) {
@@ -79,7 +68,7 @@ export default class CreateContact extends Component {
   }
 
   render() {
-    const { feedbackMessage } = this.state;
+    const { feedbackMessage, contactName, contactLastName, contactEmail } = this.state;
     return (
       <div>
         <form>
@@ -88,21 +77,21 @@ export default class CreateContact extends Component {
             label="Name"
             margin="normal"
             onChange={event => this.handleChange('contactName', event)}
-            value={this.state.contactName}
+            value={contactName}
           />
           <TextField
             classes={styles.textField}
             label="Last Name"
             margin="normal"
             onChange={event => this.handleChange('contactLastName', event)}
-            value={this.state.contactLastName}
+            value={contactLastName}
           />
           <TextField
             classes={styles.textField}
             label="Email Address"
             margin="normal"
             onChange={event => this.handleChange('contactEmail', event)}
-            value={this.state.contactEmail}
+            value={contactEmail}
           />
           <Button color="primary" onClick={this.handleSubmit} variant="outlined" className={styles.button}>
             Create Contact

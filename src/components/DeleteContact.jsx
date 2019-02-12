@@ -27,7 +27,7 @@ const initialState = {
 };
 
 export default class DeleteContact extends Component {
-  state = { ...initialState };
+  state = { ...initialState }
 
   handleSubmit = async () => {
     const { contactName, contactLastName } = this.state;
@@ -46,15 +46,15 @@ export default class DeleteContact extends Component {
       return;
     }
 
-    const contacts = await getUserContacts(userId);
     this.setState({
       ...initialState,
     });
-    this.updateAppState(contacts);
+    this.updateAppState();
   }
-
-  updateAppState = contacts => {
-    const { updateContacts } = this.props;
+  
+  updateAppState = async () => {
+    const { updateContacts, userId } = this.props;
+    const contacts = await getUserContacts(userId);
     updateContacts(contacts);
   }
 

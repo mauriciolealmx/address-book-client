@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 
-import Header from './Header/Header';
-import Login from './Login';
-import Register from './Register';
-import './App.css';
 import AddressBook from './AddressBook/AddressBook';
+import AuthForm from './AuthForm/AuthForm';
+import Header from './Header/Header';
+import './App.css';
 
 const initialState = {
   userContacts: [],
   userId: '',
-  signIn: true,
 };
 
 export default class App extends Component {
@@ -23,20 +21,16 @@ export default class App extends Component {
     this.setState({
       userId,
     });
-  }
+  };
 
   isLoggedIn = () => {
     const { userId } = this.state;
     return !!userId;
-  }
+  };
 
   logOut = () => {
     this.setState(cloneDeep(initialState));
-  }
-
-  createSignInToggle = () => {
-    this.setState(prevState => ({ signIn: !prevState.signIn }));
-  }
+  };
 
   render() {
     const { userId, userContacts, signIn } = this.state;
@@ -47,10 +41,8 @@ export default class App extends Component {
         <div className="App-content">
           {isLoggedIn ? (
             <AddressBook userId={userId} userContacts={userContacts} />
-          ) : signIn ? (
-            <Login updateUserId={this.updateUserId} alternativeButtonAction={this.createSignInToggle} />
           ) : (
-            <Register alternativeButtonAction={this.createSignInToggle} />
+            <AuthForm updateUserId={this.updateUserId} />
           )}
         </div>
       </div>
